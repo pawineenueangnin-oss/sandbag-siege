@@ -7,3 +7,10 @@ Enemy troops, jeeps, APCs, tanks, helicopters and a boss tank march along the ro
 Play (v2 – realistic look, short roads, zoomed-in): https://pawineenueangnin-oss.github.io/sandbag-siege/
 
 v1 (original cartoon version): https://pawineenueangnin-oss.github.io/sandbag-siege/v1.html
+
+
+## v3
+- SELECT NEW TECH screen after each wave: 3 random cards (19 upgrades, Common/Rare/Epic), 1 free pick, 3 rerolls per map, active upgrades shown as HUD icons.
+- High-tech military UI skin (steel panels, blue glow, gold headings), drawn entirely in CSS/canvas.
+- Roads clearly outlined on all maps (desert fixed).
+- Previous versions: [v2.html](v2.html), [v1.html](v1.html)
