@@ -293,6 +293,12 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
 #mDaily h4{margin:12px 0 4px}.mis{text-align:left;display:flex;align-items:center;gap:8px;font-size:13px;margin:5px 0}.mis span:first-child{flex:1}.mis .bar{width:70px;height:6px;background:#0b0f12}.mis .bar i{display:block;height:100%;background:#7ad84a}.mis.done{color:#9fe07a}
 .strow{display:flex;justify-content:space-between;padding:6px 2px;border-bottom:1px solid rgba(255,255,255,.08);font-size:15px}.strow b{color:#ffd447}
 @media (max-height:700px){#bArmG .lbl,#bArmG span:not(.ic){display:none}.btn{min-height:42px}.pill{height:40px;font-size:17px}#bAir{height:44px}#nextW{top:calc(92px + var(--st))}}
+
+/* v9 */
+#tLang{position:absolute;top:calc(10px + var(--st));right:10px;z-index:11;display:none;align-items:center;gap:6px;height:42px;padding:0 12px;font:inherit;font-weight:900;font-size:16px;color:#eaf4ff;background:linear-gradient(#2e3843,#151b21);border:1px solid #3fb4ff;border-radius:3px;box-shadow:0 0 10px rgba(63,180,255,.4)}
+#title.on ~ #tLang{display:flex}
+#eCmp{margin:8px 0;padding:8px;font-weight:900;font-size:17px;border-radius:3px}#eCmp.win{background:rgba(70,160,40,.25);color:#b6ff8a;border:1px solid #6ad040}#eCmp.lose{background:rgba(160,40,30,.25);color:#ffb0a0;border:1px solid #e05a40}
+.priv{font-size:12px;opacity:.8;text-align:left;margin:2px 0 6px}
 </style>
 </head>
 <body>
@@ -343,7 +349,7 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
   <button class="btn b" id="tHow" data-t="How to play">How to play</button>
   <div class="trow"><button class="btn b" id="tDaily" data-t="Daily reward">Daily reward</button><button class="btn b" id="tStats" data-t="Stats">Stats</button></div>
   <button class="btn gr" id="tSet" data-t="Settings">Settings</button>
-  <div class="ver" style="text-align:center">Sandbag Siege v4.0.0</div>
+  <div class="ver" style="text-align:center">Sandbag Siege v9.0</div>
  </div>
 </div>
 <div class="screen" id="armory">
@@ -376,6 +382,7 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
  <div class="set"><span data-t="Music">Music</span><div class="seg"><button id="mOn" data-t="On">On</button><button id="mOff" data-t="Off">Off</button></div></div>
  <div class="set"><span></span><input type="range" id="mus" min="0" max="100" value="50"></div>
  <div class="set"><span data-t="Vibration">Vibration</span><div class="seg"><button id="vOn" data-t="On">On</button><button id="vOff" data-t="Off">Off</button></div></div>
+ <div class="set"><span data-t="Privacy">Privacy</span></div><p class="priv" data-t="No personal data is collected. Progress is saved only on this device. Ads (if shown) come from the app store version's ad partner.">No personal data is collected.</p>
  <button class="btn g" id="setOk" data-t="OK">OK</button>
 </div></div>
 <div class="modal" id="mHow"><div class="box">
@@ -403,9 +410,18 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
  <button class="btn b" id="eDbl" style="display:none">Watch ad: double medals</button>
  <button class="btn g" id="eNext" data-t="Next map">Next map</button>
  <button class="btn g" id="eRetry" data-t="Play again">Play again</button>
+ <div id="eCmp" style="display:none"></div>
+ <button class="btn b" id="eChal" data-t="Challenge a friend">Challenge a friend</button>
  <button class="btn gr" id="eMaps" data-t="Menu">Menu</button>
 </div></div>
 <div id="toast"></div>
+<div class="modal" id="mChal"><div class="box"><h3 data-t="Challenge a friend">Challenge a friend</h3><p id="cScore" style="font-weight:900;color:#ffd447;font-size:20px;margin:6px 0"></p><p data-t="Same map, same waves. Beat the score!">Same map, same waves. Beat the score!</p>
+<label style="display:block;text-align:left;font-weight:800;margin-top:8px" data-t="Your name">Your name</label><input id="cName" maxlength="16" autocomplete="off" style="width:100%;font:inherit;font-size:18px;padding:8px;border-radius:3px;border:1px solid #4f6274;background:#0f1418;color:#fff">
+<input id="cLink" readonly style="display:none;width:100%;margin-top:8px;font-size:12px;padding:6px;background:#0f1418;color:#9fd6ff;border:1px solid #3fb4ff">
+<button class="btn g" id="cShare" data-t="Share challenge">Share challenge</button><button class="btn gr" id="cX" data-t="Close">Close</button></div></div>
+<div class="modal" id="mChalIn"><div class="box"><h3 data-t="Challenge">Challenge</h3><p id="ciWho" style="font-weight:900;font-size:20px"></p><p><span data-t="Score to beat">Score to beat</span>: <b id="ciSc" style="color:#ffd447;font-size:22px"></b></p><p data-t="Same map, same waves. Beat the score!">Same map, same waves. Beat the score!</p>
+<button class="btn g" id="ciGo" data-t="Accept">Accept</button><button class="btn gr" id="ciNo" data-t="Not now">Not now</button></div></div>
+<button id="tLang" aria-label="Language"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 4.5 6.5 4.5 10S15 19 12 22M12 2C9 5 7.5 8.5 7.5 12S9 19 12 22"/></svg><span id="tLangL">EN</span></button>
 <div id="nextW"></div>
 <button id="bAir"><span class="ai">✈</span><span class="al" data-t="Airstrike">Airstrike</span><span class="ac">$<b id="airC">120</b></span><span class="af"><i id="airF"></i></span></button>
 <div id="undo"><span id="undoTx"></span><button id="undoB" data-t="Undo">Undo</button></div>
@@ -1813,6 +1829,38 @@ function special3(g,id,lv,a,x,y,k,time,recoil){ bset(g); const c=Math.cos(a), s=
  g.restore(); }
 
 { const _u=update; update=function(dt){ _u.apply(this,arguments); if(G.mode==="play"&&!G.demo){ airUpd(dt); hqSeqTick(dt); } }; }
+// ===================== v9: seeded runs + friend challenge + language button =====================
+Object.assign(TH,{"Challenge a friend":"ท้าเพื่อน","Your name":"ชื่อของคุณ","Share challenge":"แชร์คำท้า","Link copied!":"คัดลอกลิงก์แล้ว!","Challenge":"คำท้า","challenges you!":"ท้าคุณ!",
+"Score to beat":"คะแนนที่ต้องเอาชนะ","Same map, same waves. Beat the score!":"แผนที่เดียวกัน คลื่นเดียวกัน ทำคะแนนให้ชนะ!","Accept":"รับคำท้า","Not now":"ไว้ก่อน",
+"You beat":"คุณชนะ","You lost to":"คุณแพ้","by":"ห่าง","points":"คะแนน","Copy this link:":"คัดลอกลิงก์นี้:","Language":"ภาษา","Privacy":"ความเป็นส่วนตัว",
+"No personal data is collected. Progress is saved only on this device. Ads (if shown) come from the app store version's ad partner.":"เกมไม่เก็บข้อมูลส่วนตัว ความคืบหน้าบันทึกไว้ในเครื่องนี้เท่านั้น โฆษณา (ถ้ามี) มาจากพาร์ทเนอร์โฆษณาของเวอร์ชันแอป"});
+let RUNSEED=0, CHAL=null;
+function withSeed(s,fn){ const o=Math.random; Math.random=rng(s|0); try{ return fn(); } finally{ Math.random=o; } }
+{ const _ss=startStage; startStage=function(st,demo,ft){ if(demo||!RUNSEED) return _ss.apply(this,arguments); const a=arguments; return withSeed(RUNSEED*7+st*1013,()=>_ss.apply(this,a)); }; }
+{ const _pt=pickTheme; pickTheme=function(prev){ if(!RUNSEED||G.demo) return _pt(prev); return withSeed(RUNSEED*11+(G.stage||1)*97,()=>_pt(prev)); }; }
+{ const _sr=startRun; startRun=function(){ RUNSEED=CHAL&&CHAL.armed?CHAL.s:((Math.random()*2147483646|0)+1); if(CHAL&&CHAL.armed){ CHAL.armed=false; CHAL.active=true; } else CHAL=null; G.seed=RUNSEED; return _sr.apply(this,arguments); }; }
+function b64e(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(s){ try{ s=s.replace(/-/g,"+").replace(/_/g,"/"); return JSON.parse(decodeURIComponent(escape(atob(s)))); }catch(e){ return null; } }
+function cleanName(n){ return String(n||"").replace(/[\u0000-\u001f<>&"'`]/g,"").trim().slice(0,16)||"?"; }
+function chalLink(){ const o={v:1,s:RUNSEED,n:cleanName(profile.name||"Player"),sc:G.score|0,st:G.stage|0}; return location.origin+location.pathname+"#c="+b64e(o); }
+function shareChal(){ profile.name=cleanName($("#cName").value); persist(); const url=chalLink(); const txt=(profile.lang==="th"?"ท้าคุณเล่น Sandbag Siege! คะแนนของฉัน ":"I challenge you in Sandbag Siege! My score ")+(G.score|0).toLocaleString()+" — ";
+ try{ if(window.AndroidAds&&typeof window.AndroidAds.share==="function"){ window.AndroidAds.share(txt+url); return; } }catch(e){}
+ if(navigator.share){ navigator.share({title:"Sandbag Siege",text:txt,url}).catch(()=>{}); return; }
+ const done=()=>toast(t("Link copied!")); if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done,()=>showLink(url)); else showLink(url); }
+function showLink(url){ const i=$("#cLink"); i.style.display="block"; i.value=url; i.select(); try{ document.execCommand("copy"); toast(t("Link copied!")); }catch(e){} }
+function openChal(){ $("#cName").value=profile.name||""; $("#cLink").style.display="none"; $("#cScore").textContent=(G.score|0).toLocaleString()+" · "+t("Stage")+" "+G.stage; $("#mChal").classList.add("on"); }
+function readChal(){ const m=/[#&?]c=([A-Za-z0-9_-]+)/.exec(location.hash+location.search); if(!m) return null; const o=b64d(m[1]); if(!o||!(o.s>0)||typeof o.sc!=="number") return null; return {s:o.s|0,n:cleanName(o.n),sc:Math.max(0,o.sc|0),st:o.st|0}; }
+function showIncoming(){ const c=readChal(); if(!c) return; CHAL=c; $("#ciWho").textContent=c.n+" "+t("challenges you!"); $("#ciSc").textContent=c.sc.toLocaleString(); $("#mChalIn").classList.add("on"); }
+$("#ciGo").onclick=()=>{ $("#mChalIn").classList.remove("on"); CHAL.armed=true; profile.tutDone=true; persist(); history.replaceState(null,"",location.pathname); sfx("click"); fadeTo(()=>{ startRun(); showPlay(); }); };
+$("#ciNo").onclick=()=>{ $("#mChalIn").classList.remove("on"); CHAL=null; history.replaceState(null,"",location.pathname); };
+$("#eChal").onclick=()=>{ sfx("click"); openChal(); }; $("#cShare").onclick=shareChal; $("#cX").onclick=()=>$("#mChal").classList.remove("on");
+{ const _e=endLevel; endLevel=function(win){ const r=_e.apply(this,arguments); if(G.mode==="end"){ const cr=$("#eCmp"); if(CHAL&&CHAL.active){ const d=(G.score|0)-CHAL.sc; cr.style.display="block"; cr.className=d>=0?"win":"lose"; cr.textContent=(d>=0?t("You beat")+" "+CHAL.n+" "+t("by")+" ":t("You lost to")+" "+CHAL.n+" "+t("by")+" ")+Math.abs(d).toLocaleString()+" "+t("points"); } else cr.style.display="none"; $("#eChal").style.display=G.demo?"none":""; } return r; }; }
+// language
+function setLang(l){ profile.lang=l; persist(); applyLang(); if(typeof refreshSet==="function") refreshSet(); NWK=""; const b=$("#tLangL"); if(b) b.textContent=l==="th"?"ไทย":"EN"; }
+$("#tLang").onclick=()=>{ sfx("click"); setLang(profile.lang==="th"?"en":"th"); };
+$("#tLangL").textContent=profile.lang==="th"?"ไทย":"EN";
+setTimeout(showIncoming,600);
+window.SBX={chalLink,readChal,b64e,b64d,get seed(){return RUNSEED;},get chal(){return CHAL;}};
 // ===================== RENDER =====================
 let DPR=1,CW=0,CH=0,S=1,OX=0,OY=0;
 function resize(){ const r=cv.getBoundingClientRect(); CW=Math.max(1,r.width); CH=Math.max(1,r.height); DPR=Math.min(DPRCAP,window.devicePixelRatio||1); cv.width=Math.round(CW*DPR); cv.height=Math.round(CH*DPR);
