@@ -208,7 +208,7 @@ body{background:#0b0f13}
 <div id="bossBar"><div class="bbh"><span class="bbw">&#9888;</span><span id="bbName">BOSS</span></div><div class="bbt"><div id="bbFill"></div></div></div>
 <div id="bossIntro"><div class="biw"><span>&#9888;</span> <span data-t="WARNING">WARNING</span> <span>&#9888;</span></div><div id="biName">BOSS</div></div>
 <div id="flash"></div>
-<div class="bottom" id="bottom"><button class="btn g" id="waveBtn">Start wave</button></div>
+<div class="bottom" id="bottom"><button class="btn g" id="waveBtn" style="display:none">Start wave</button></div>
 <div class="sheet" id="buildSheet">
  <div class="sh-h"><span data-t="Build a gun">Build a gun</span><button class="x" id="bsX">X</button></div>
  <div class="grid" id="buildGrid"></div>
@@ -522,9 +522,9 @@ function sellVal(tw){ return Math.round(tw.spent*0.6/5)*5; }
 
 // ===================== WAVES =====================
 function callWave(){ if(G.wave>=G.N||G.mode!=="play") return; const busy=G.queue.length>0||G.E.length>0; const w=G.wave;
- let bonus=0; if(busy&&w>0){ bonus=8+3*w; flyBonus(bonus,VW/2,VH-40); toast("+"+bonus+" "+t("early bonus")); }
+ if(busy) return;
  const ev=buildWave(G.stage||1,w,G.N); ev.forEach(e=>G.queue.push({t:G.time+e.t,type:e.type,w})); G.wcount[w]=ev.length; G.wave++;
- sfx("wave"); if(w===G.N-1) banner(t("Final wave!"),true); else banner(t("Wave")+" "+(w+1));
+ sfx("wave"); if(w===G.N-1) banner(t("Final wave!"),true); else banner(t("Wave")+" "+(w+1)+"/"+G.N);
  if(ev.some(e=>e.type==="heli")&&!G.seenHeli){ G.seenHeli=1; setTimeout(()=>toast(t("Helicopters!")),1500); }
  hudDirty=true; }
 function spawn(type,w,at){ const D=ET[type], m=G.m; const hm=0.95*Math.pow(1.3,(G.stage||1)-1)*(1+0.08*w)*(G.demo?0.6:1);
@@ -659,6 +659,8 @@ function update(dt){
   if(c.t>=4) collectCoin(i,true); }
  G.shake=Math.max(0,G.shake-dt*28); G.hqFlash=Math.max(0,G.hqFlash-dt*2);
  if(!G.demo&&G.mode==="play"&&G.wave>=G.N&&!G.queue.length&&!G.E.length&&G.winT<0&&!G.bossDie) G.winT=1.4;
+ // auto waves: short pause after each wave is fully cleared (and after any tech pick), then the next wave rolls in
+ if(!G.demo&&G.mode==="play"&&G.wave<G.N&&!G.queue.length&&!G.E.length&&!G.techOpen&&!(G.techQ>0)){ G.autoT=(G.autoT||0)+dt; if(G.autoT>=(G.wave===0?4:2)){ G.autoT=0; callWave(); } } else G.autoT=0;
  if(G.techQ>0&&!G.techOpen&&G.mode==="play"&&!G.demo&&G.winT<0) openTech();
  if(G.winT>0){ G.winT-=dt; if(G.winT<=0&&G.mode==="play"){ while(G.coinsG.length) collectCoin(0,true); stageClear(); } }
 }

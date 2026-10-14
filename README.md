@@ -21,3 +21,6 @@ v1 (original cartoon version): https://pawineenueangnin-oss.github.io/sandbag-si
 - Endless run: each stage has 10 waves ending in a boss (Iron Goliath super-tank or Sky Warden gunship) with an intro, an enraged phase, turret-jamming attacks and a big death explosion. Clearing a stage moves you to a new random battlefield (grass, desert, snow, jungle, city ruins, night) with scaling difficulty. Stage, score and best are saved.
 - Camera zoomed in ~1.5x, 5-6 larger build pads per stage, shorter roads.
 - Previous versions: [v3.html](v3.html), [v2.html](v2.html), [v1.html](v1.html)
+
+## v4b
+- Waves start automatically about 2s after the previous wave is cleared (and after the tech pick). The next-wave button and early-call bonus were removed. Previous: [v4.html](v4.html)
