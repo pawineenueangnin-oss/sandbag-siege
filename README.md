@@ -14,3 +14,10 @@ v1 (original cartoon version): https://pawineenueangnin-oss.github.io/sandbag-si
 - High-tech military UI skin (steel panels, blue glow, gold headings), drawn entirely in CSS/canvas.
 - Roads clearly outlined on all maps (desert fixed).
 - Previous versions: [v2.html](v2.html), [v1.html](v1.html)
+
+
+## v4
+- Smooth spline roads with depth: crowned surface, worn ruts, raised berms/curbs, lit shading, tire tracks.
+- Endless run: each stage has 10 waves ending in a boss (Iron Goliath super-tank or Sky Warden gunship) with an intro, an enraged phase, turret-jamming attacks and a big death explosion. Clearing a stage moves you to a new random battlefield (grass, desert, snow, jungle, city ruins, night) with scaling difficulty. Stage, score and best are saved.
+- Camera zoomed in ~1.5x, 5-6 larger build pads per stage, shorter roads.
+- Previous versions: [v3.html](v3.html), [v2.html](v2.html), [v1.html](v1.html)
