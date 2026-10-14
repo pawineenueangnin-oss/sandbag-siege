@@ -24,3 +24,12 @@ v1 (original cartoon version): https://pawineenueangnin-oss.github.io/sandbag-si
 
 ## v4b
 - Waves start automatically about 2s after the previous wave is cleared (and after the tech pick). The next-wave button and early-call bonus were removed. Previous: [v4.html](v4.html)
+
+## v5
+- Armory: earn medals each run, unlock guns (start with Rifle, MG, Mortar), permanent upgrades, soldier skins, achievements.
+- Guided first-stage tutorial (skippable, shown once).
+- Original synthesized music: menu, battle and boss themes; music/SFX toggles.
+- Rebalanced difficulty curve and between-stage coins; capped fire-rate card stacking.
+- Optional rewarded ads (revive, double medals, +150 coins), interstitials only after stage/run end with a cap.
+- Adaptive quality (particles + resolution) for steady frame rate; darker night with lights; cinematic title and transitions.
+- Previous: [v4b.html](v4b.html)
