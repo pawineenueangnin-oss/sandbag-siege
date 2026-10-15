@@ -1,13 +1,13 @@
-# Sandbag Siege – audio licenses (v18)
+# Sandbag Siege – audio licenses (v20)
 
 All music and sound effects are synthesized at runtime with the Web Audio API (no audio files).
-The only embedded audio is the soldier voice clips (base64 Ogg/Opus inside index.html, ~36 KB raw / ~49 KB base64).
+The only embedded audio is the soldier voice clips (base64 Ogg/Opus inside index.html, 39 clips, ~100 KB raw / ~134 KB base64).
 
-## Soldier voice clips (English: "Yes sir!", "Roger!", "Go go go!", "Copy that!", "Contact!", "Boss incoming!", "HQ under fire!", "Airstrike inbound!")
+## Soldier voice clips (English, 14 lines: "Yes sir!", "Roger!", "Copy that!", "Go go go!", "Move, move!", "Contact!", "Boss incoming!", "HQ under fire!", "Airstrike inbound!", "Enemy aircraft!", "Hold the line!", "Target down!", "Engineers on the way!", "Repairs complete!")
 
 | Item | Detail | License |
 |---|---|---|
-| Voice model | Piper `en_US-libritts-high`, speaker id 520 (rhasspy/piper-voices on Hugging Face) | Model repo: MIT. Model card: *trained from scratch* on LibriTTS train-clean-360 |
+| Voice model | Piper `en_US-libritts-high`, speaker ids 520, 760, 472, 288 (deep male; 2–3 takes per line from different speakers; calm delivery for confirms, faster/louder/more driven "urgent" processing for combat calls) (rhasspy/piper-voices on Hugging Face) | Model repo: MIT. Model card: *trained from scratch* on LibriTTS train-clean-360 |
 | Training data | LibriTTS (Zen et al., 2019), derived from LibriSpeech / LibriVox public-domain readings | **CC BY 4.0** – commercial use allowed, attribution required |
 | Synthesis software | piper-tts 1.8.0 (GPL-3.0-or-later) + espeak-ng phonemizer (GPL-3.0) | Used only offline on the build machine; GPL does not apply to the generated audio, and no GPL code ships in the game |
 | Post-processing | ffmpeg (pitch −~2 st, EQ, compression, soft-clip, loudnorm, silence trim), libopus 24 kbps | Tools only |
