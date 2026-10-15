@@ -1,9 +1,9 @@
-# Sandbag Siege – audio licenses (v24)
+# Sandbag Siege – audio licenses (v25)
 
 Embedded audio (base64 Ogg/Opus inside index.html): 22 recorded sound effects (CC0, ~130 KB raw / ~174 KB base64) and the soldier voice clips (CC BY 4.0, below).
 Music, the tesla zap, sub-bass explosion tails, engine rumble, ambience, reverb impulse responses and all UI tones not listed below are synthesized at runtime with the Web Audio API (original, no third-party material).
 
-## Recorded sound effects (v24) – all CC0 1.0 (public domain dedication)
+## Recorded sound effects (v25) – all CC0 1.0 (public domain dedication)
 
 Every file below was checked on its Freesound page on 2026-10-15 and is published under **Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/)**: commercial use and embedding allowed, no attribution required (credited anyway). Source = Freesound's HQ preview of the sound. Processing (ffmpeg + numpy, build machine only): trim, 3 ms fade-in / fade-out, 35 Hz high-pass, light EQ, compression (3:1), peak normalize to −1 dBFS, loop crossfade for loops, mono 48 kHz Opus 28 kbps. At runtime: random pitch ±6 %, random gain, stereo panning + distance low-pass, short outdoor reverb, ducking, 8-voice gun pool.
 
@@ -25,9 +25,9 @@ Every file below was checked on its Freesound page on 2026-10-15 and is publishe
 | `click` | UI click | [SFX UI Button Click](https://freesound.org/people/suntemple/sounds/253168/) by suntemple (Freesound #253168) | CC0 1.0 | 0.14 s, 1241 B |
 | `coin` | coin pickup | [coin object](https://freesound.org/people/Leszek_Szary/sounds/146723/) by Leszek_Szary (Freesound #146723) | CC0 1.0 | 0.14 s, 761 B |
 | `wrench` | engineer ratchet | [ratchet socket wrench tool](https://freesound.org/people/AlaskaRobotics/sounds/551497/) by AlaskaRobotics (Freesound #551497) | CC0 1.0 | 0.95 s, 3343 B |
-| `whistle` | incoming shell whistle | [Incoming mortar 1](https://freesound.org/people/Zagge28/sounds/241840/) by Zagge28 (Freesound #241840) | CC0 1.0 | 1.6 s, 5580 B |
+| `whistle` | incoming shell whistle | [Incoming mortar 4](https://freesound.org/people/Zagge28/sounds/241837/) by Zagge28 (Freesound #241837) | CC0 1.0 | 1.6 s, 5580 B |
 | `siren` | air-raid siren (engineers / alarm) | [air_raid.R.wav](https://freesound.org/people/torn.rugged.audio.35/sounds/45933/) by torn.rugged.audio.35 (Freesound #45933) | CC0 1.0 | 4.75 s, 20171 B |
-| `jet` | jet flyby (enemy jets, airstrike) | [Whoosh_Passby_Jet_Long_Stereo.wav](https://freesound.org/people/Nox_Sound/sounds/623015/) by Nox_Sound (Freesound #623015) | CC0 1.0 | 6.4 s, 21115 B |
+| `jet` | jet flyby (enemy jets, airstrike) | [Jet.ogg](https://freesound.org/people/egomassive/sounds/536809/) by egomassive (Freesound #536809) | CC0 1.0 | 6.4 s, 21115 B |
 | `heli` | helicopter rotor loop | [MILITARY ROTOR LOOP](https://freesound.org/people/UnderlinedDesigns/sounds/172667/) by UnderlinedDesigns (Freesound #172667) | CC0 1.0 | 0.78 s, 2935 B |
 | `jeep` | jeep engine | [djeep_idle.wav](https://freesound.org/people/Mihacappy/sounds/840649/) by Mihacappy (Freesound #840649) | CC0 1.0 | 2.48 s, 8460 B |
 | `tank` | tank engine + tracks (also APC, pitched) | [t26_moving_01.wav](https://freesound.org/people/greatmganga/sounds/329800/) by greatmganga (Freesound #329800) | CC0 1.0 | 4.38 s, 14955 B |
@@ -65,3 +65,6 @@ Options for Thai:
 1. **Record a real Thai male voice actor** (7 lines, ~10 min session; Fiverr/local studio or a friend) with a written release granting commercial use – best quality and cleanest rights. Drop WAVs in and re-run the same ffmpeg chain.
 2. Buy a commercial TTS license that explicitly permits redistributing generated audio in apps (e.g. a paid plan of a Thai TTS vendor such as Botnoi Voice / Paxa TTS Flash / ElevenLabs paid tier) – check the terms first.
 3. Keep English clips for all languages (current behaviour).
+
+## v25 processing
+All clips: high-pass 100 Hz, −2 dB @ 250 Hz, no compression/saturation, normalised to −3 dBFS peak, 5 ms fade-in, Opus 28 kbps. Runtime: 8 ms/12 ms fades, master HP 110 Hz + gentle limiter (ceiling −1 dBFS). Whistle and jet sources replaced in v25 (previous recordings were clipped).
