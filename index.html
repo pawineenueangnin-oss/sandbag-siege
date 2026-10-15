@@ -297,6 +297,7 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
 /* v9 */
 #tLang{position:absolute;top:calc(10px + var(--st));right:10px;z-index:11;display:none;align-items:center;gap:6px;height:42px;padding:0 12px;font:inherit;font-weight:900;font-size:16px;color:#eaf4ff;background:linear-gradient(#2e3843,#151b21);border:1px solid #3fb4ff;border-radius:3px;box-shadow:0 0 10px rgba(63,180,255,.4)}
 #title.on ~ #tLang{display:flex}
+#langMenu{position:absolute;top:calc(58px + var(--st));right:10px;z-index:12;background:#151b21;border:1px solid #3fb4ff;border-radius:4px;padding:6px;display:flex;flex-direction:column;gap:6px;box-shadow:0 6px 20px rgba(0,0,0,.6)}#langMenu[hidden]{display:none}#langMenu button{display:flex;align-items:center;gap:10px;min-width:150px;height:44px;padding:0 12px;font:inherit;font-weight:800;font-size:16px;color:#eaf4ff;background:#232c35;border:1px solid transparent;border-radius:3px}#langMenu button.sel{border-color:#7ddc1f;background:#24361f}#langMenu canvas{width:30px;height:20px;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.4)}
 #eCmp{margin:8px 0;padding:8px;font-weight:900;font-size:17px;border-radius:3px}#eCmp.win{background:rgba(70,160,40,.25);color:#b6ff8a;border:1px solid #6ad040}#eCmp.lose{background:rgba(160,40,30,.25);color:#ffb0a0;border:1px solid #e05a40}
 .priv{font-size:12px;opacity:.8;text-align:left;margin:2px 0 6px}
 
@@ -481,7 +482,7 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
 <button class="btn g" id="cShare" data-t="Share challenge">Share challenge</button><button class="btn gr" id="cX" data-t="Close">Close</button></div></div>
 <div class="modal" id="mChalIn"><div class="box"><h3 data-t="Challenge">Challenge</h3><p id="ciWho" style="font-weight:900;font-size:20px"></p><p><span data-t="Score to beat">Score to beat</span>: <b id="ciSc" style="color:#ffd447;font-size:22px"></b></p><p data-t="Same map, same waves. Beat the score!">Same map, same waves. Beat the score!</p>
 <button class="btn g" id="ciGo" data-t="Accept">Accept</button><button class="btn gr" id="ciNo" data-t="Not now">Not now</button></div></div>
-<button id="tLang" aria-label="Language"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 4.5 6.5 4.5 10S15 19 12 22M12 2C9 5 7.5 8.5 7.5 12S9 19 12 22"/></svg><span id="tLangL">EN</span></button>
+<button id="tLang" aria-label="Language / ภาษา"><canvas id="tLangF" width="56" height="36" style="width:28px;height:18px;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.4)"></canvas><span id="tLangL">EN</span><span style="font-size:11px;opacity:.8">▾</span></button><div id="langMenu" hidden></div>
 <div id="nextW"></div>
 <button id="bAir"><span class="ai">✈</span><span class="al" data-t="Airstrike">Airstrike</span><span class="ac">$<b id="airC">120</b></span><span class="af"><i id="airF"></i></span></button>
 <div id="undo"><span id="undoTx"></span><button id="undoB" data-t="Undo">Undo</button></div>
@@ -492,6 +493,41 @@ body.tut #bArmG{opacity:.3;pointer-events:none;filter:grayscale(1)}
 <div id="ad-slot" aria-hidden="true" hidden></div>
 </div>
 <script>
+// ===== DEMO ADS (temporary) — web only, when no real window.AndroidAds. To disable: set DEMO_ADS_DEFAULT=false (or open with ?demoads=0). =====
+const DEMO_ADS_DEFAULT=true;
+const DEMO_Q=(location.search.match(/[?&]demoads=(\d)/)||[])[1];
+const DEMOADS=!window.AndroidAds&&(DEMO_Q?DEMO_Q==="1":DEMO_ADS_DEFAULT);
+const DEMO_FAST=DEMOADS&&DEMO_Q==="1"; // ?demoads=1 → interstitial may appear from the first game end
+if(DEMOADS){ (function(){
+ const css=document.createElement("style"); css.textContent=`
+.dmAd{position:fixed;inset:0;z-index:100;background:#0b0f14;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:system-ui,sans-serif;text-align:center;padding:24px}
+.dmAd .lb{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;background:#ffd23f;color:#000;font-weight:900;font-size:12px;padding:3px 8px;border-radius:3px}
+.dmAd .x{position:absolute;top:calc(8px + env(safe-area-inset-top));right:8px;width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.5);color:#fff;font-size:22px;font-weight:900}
+.dmAd .card{width:min(86vw,360px);aspect-ratio:1.2;border-radius:12px;background:linear-gradient(135deg,#3a6b2a,#1d3a5c);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;border:2px dashed rgba(255,255,255,.5)}
+.dmAd .pb{width:min(80vw,320px);height:10px;background:#333;border-radius:5px;overflow:hidden}.dmAd .pb i{display:block;height:100%;width:0;background:#7ddc1f}
+.dmAd .ok{padding:12px 22px;font-weight:900;font-size:17px;background:#7ddc1f;color:#000;border:0;border-radius:6px}
+.dmBan{width:320px;max-width:96%;height:50px;display:flex;align-items:center;justify-content:center;gap:8px;background:repeating-linear-gradient(45deg,#2b3340 0 10px,#262d38 10px 20px);border:1px dashed #ffd23f;color:#ffd23f;font:700 13px system-ui,sans-serif}`;
+ document.head.appendChild(css);
+ const TXT="โฆษณาตัวอย่าง / Test Ad";
+ function ov(html){ const d=document.createElement("div"); d.className="dmAd"; d.innerHTML='<span class="lb">'+TXT+'</span>'+html; document.body.appendChild(d); return d; }
+ let rwT=0;
+ window.AndroidAds={
+  bannerHeight(){ return 50; },
+  showBanner(on){ setTimeout(()=>{ const s=document.getElementById("ad-slot"); if(s&&!s.firstChild) s.innerHTML='<div class="dmBan">📢 '+TXT+' · 320×50</div>'; },0); },
+  showInterstitial(){ const d=ov('<button class="x" aria-label="Close">✕</button><div class="card">'+TXT+'<br>Interstitial</div><div style="opacity:.7;font-size:13px">Sample placement — real ads appear in the Android app</div>');
+   d.querySelector(".x").onclick=()=>{ d.remove(); window.Ads&&Ads.closeInterstitial(); }; },
+  hasRewarded(){ return true; },
+  showRewarded(){ const d=ov('<button class="x" aria-label="Close">✕</button><div class="card">'+TXT+'<br>Rewarded video</div><div class="pb"><i></i></div><div class="st" style="font-size:14px;opacity:.8">ดูให้จบเพื่อรับรางวัล / Watch to earn reward</div>');
+   const bar=d.querySelector(".pb i"), st=d.querySelector(".st"); let done=false; const t0=performance.now(), DUR=4000;
+   function step(){ if(!d.isConnected) return; const p=Math.min(1,(performance.now()-t0)/DUR); bar.style.width=(p*100)+"%"; if(p<1) requestAnimationFrame(step); else { done=true; st.textContent="ได้รับรางวัลแล้ว! / Reward earned!"; const b=document.createElement("button"); b.className="ok"; b.textContent="รับรางวัล / Collect"; b.onclick=close; d.appendChild(b); } }
+   requestAnimationFrame(step);
+   function close(){ d.remove(); if(done&&window.Ads) Ads.onReward(); window.Ads&&Ads.closeRewarded(); }
+   d.querySelector(".x").onclick=close; },
+  share(t){ try{ if(navigator.share){ navigator.share({text:t}).catch(()=>{}); return; } }catch(e){} try{ navigator.clipboard.writeText(t); }catch(e){} if(typeof toast==="function") toast(profile.lang==="th"?"คัดลอกลิงก์แล้ว":"Link copied"); },
+  vibrate(ms){ try{ navigator.vibrate&&navigator.vibrate(ms); }catch(e){} }
+ };
+ window.AndroidAds.__demo=true;
+})(); }
 "use strict";
 const $=s=>document.querySelector(s);
 const app=$("#app"),cv=$("#cv"),ctx=cv.getContext("2d");
@@ -1916,9 +1952,19 @@ $("#ciNo").onclick=()=>{ $("#mChalIn").classList.remove("on"); CHAL=null; histor
 $("#eChal").onclick=()=>{ sfx("click"); openChal(); }; $("#cShare").onclick=shareChal; $("#cX").onclick=()=>$("#mChal").classList.remove("on");
 { const _e=endLevel; endLevel=function(win){ const r=_e.apply(this,arguments); if(G.mode==="end"){ const cr=$("#eCmp"); if(CHAL&&CHAL.active){ const d=(G.score|0)-CHAL.sc; cr.style.display="block"; cr.className=d>=0?"win":"lose"; cr.textContent=(d>=0?t("You beat")+" "+CHAL.n+" "+t("by")+" ":t("You lost to")+" "+CHAL.n+" "+t("by")+" ")+Math.abs(d).toLocaleString()+" "+t("points"); } else cr.style.display="none"; $("#eChal").style.display=G.demo?"none":""; } return r; }; }
 // language
-function setLang(l){ profile.lang=l; persist(); applyLang(); if(typeof refreshSet==="function") refreshSet(); NWK=""; const b=$("#tLangL"); if(b) b.textContent=l==="th"?"ไทย":"EN"; }
-$("#tLang").onclick=()=>{ sfx("click"); setLang(profile.lang==="th"?"en":"th"); };
-$("#tLangL").textContent=profile.lang==="th"?"ไทย":"EN";
+function drawFlag(c,l){ const x=c.getContext("2d"),W=c.width,H=c.height; x.clearRect(0,0,W,H);
+ if(l==="th"){ const s=H/6; x.fillStyle="#A51931"; x.fillRect(0,0,W,H); x.fillStyle="#F4F5F8"; x.fillRect(0,s,W,4*s); x.fillStyle="#2D2A4A"; x.fillRect(0,2*s,W,2*s); return; }
+ x.fillStyle="#012169"; x.fillRect(0,0,W,H); x.save(); x.beginPath(); x.rect(0,0,W,H); x.clip(); x.lineCap="butt";
+ x.strokeStyle="#fff"; x.lineWidth=H*.2; x.beginPath(); x.moveTo(0,0); x.lineTo(W,H); x.moveTo(W,0); x.lineTo(0,H); x.stroke();
+ x.strokeStyle="#C8102E"; x.lineWidth=H*.07; x.beginPath(); x.moveTo(0,0); x.lineTo(W,H); x.moveTo(W,0); x.lineTo(0,H); x.stroke();
+ x.fillStyle="#fff"; x.fillRect(W/2-H*.17,0,H*.34,H); x.fillRect(0,H/2-H*.17,W,H*.34);
+ x.fillStyle="#C8102E"; x.fillRect(W/2-H*.1,0,H*.2,H); x.fillRect(0,H/2-H*.1,W,H*.2); x.restore(); }
+function langUI(){ const l=profile.lang==="th"?"th":"en"; $("#tLangL").textContent=l==="th"?"ไทย":"English"; drawFlag($("#tLangF"),l);
+ const m=$("#langMenu"); m.innerHTML=""; [["th","ไทย"],["en","English"]].forEach(([k,n])=>{ const b=document.createElement("button"); b.className=k===l?"sel":""; b.dataset.l=k; const c=document.createElement("canvas"); c.width=60; c.height=40; drawFlag(c,k); b.appendChild(c); b.appendChild(document.createTextNode(n)); b.onclick=e=>{ e.stopPropagation(); sfx("click"); m.hidden=true; setLang(k); }; m.appendChild(b); }); }
+function setLang(l){ profile.lang=l; persist(); applyLang(); if(typeof refreshSet==="function") refreshSet(); NWK=""; langUI(); }
+$("#tLang").onclick=e=>{ e.stopPropagation(); sfx("click"); const m=$("#langMenu"); m.hidden=!m.hidden; };
+document.addEventListener("pointerdown",e=>{ const m=$("#langMenu"); if(m&&!m.hidden&&!m.contains(e.target)&&!$("#tLang").contains(e.target)) m.hidden=true; });
+langUI();
 setTimeout(showIncoming,600);
 window.SBX={chalLink,readChal,b64e,b64d,get seed(){return RUNSEED;},get chal(){return CHAL;}};
 
@@ -2106,8 +2152,8 @@ function adsRwGrant(){ if(!ADS.rwBusy) return false; if(rwKind==="revive"){ if(A
  $("#mEnd").classList.remove("on"); G.mode="play"; $("#bottom").classList.add("on"); hudDirty=true; toast("+5 ♥"); return true; }
 function adsRwUnavailable(){ ADS.rwBusy=false; ADS.showing=false; audio.resume(); $("#eRev").style.display="none"; }
 function adsRwClosed(){ ADS.rwBusy=false; ADS.showing=false; audio.resume(); adsRwRefresh(); }
-function maybeInterstitial(after){ let ok=adsHas("showInterstitial")&&!ADS.showing&&ADS.sessionEnds>2&&ADS.ends>=3&&ADS.rwDone!==ADS.levelId;
- const last=Number(save.get(AD_LAST_KEY,0))||0; if(ok&&last<=Date.now()&&Date.now()-last<180000) ok=false;
+function maybeInterstitial(after){ let ok=adsHas("showInterstitial")&&!ADS.showing&&(DEMO_FAST||ADS.sessionEnds>2&&ADS.ends>=3)&&ADS.rwDone!==ADS.levelId;
+ const last=Number(save.get(AD_LAST_KEY,0))||0; if(ok&&!DEMO_FAST&&last<=Date.now()&&Date.now()-last<180000) ok=false;
  if(!ok){ after(); return; } ADS.ends=0; save.set(AD_LAST_KEY,Date.now()); ADS.showing=true; ADS.after=after; audio.suspend();
  clearTimeout(ADS.afterTO); ADS.afterTO=setTimeout(adsInterClosed,90000); try{ window.AndroidAds.showInterstitial(); }catch(e){ adsInterClosed(); } }
 function adsInterClosed(){ if(!ADS.showing&&!ADS.after) return; clearTimeout(ADS.afterTO); ADS.showing=false; const f=ADS.after; ADS.after=null; audio.resume(); if(f) try{ f(); }catch(e){} }
