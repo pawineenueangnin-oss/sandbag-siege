@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Sandbag Siege – sound preview (v25)</title>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Sandbag Siege – sound preview (v26)</title>
 <style>body{font:14px system-ui,sans-serif;background:#1a2028;color:#e8e8e0;margin:0;display:flex;flex-wrap:wrap;gap:16px;padding:12px}#l{flex:1 1 420px;max-width:640px}h2{color:#ffd447;margin:14px 0 6px}button{background:#2e5a8a;color:#fff;border:0;border-radius:6px;padding:7px 10px;margin:3px 6px 3px 0;font-weight:700;cursor:pointer}button:hover{background:#3b74b0}small{opacity:.75}a{color:#9fd6ff}iframe{width:360px;height:640px;border:2px solid #56687a;border-radius:8px;flex:none}</style></head><body>
 <div id=l><h1>Sandbag Siege – sound preview</h1><p>Tap <b>Start audio</b> first. The game on the right is the real build, so everything you hear is the in-game mix (spatial panning, reverb, ducking, sliders). Licences: <a href="AUDIO-LICENSES.md">AUDIO-LICENSES.md</a>.</p>
 <button id=go style="background:#2a8a3a">▶ Start audio</button>
@@ -7,12 +7,16 @@
 <button data-e="sfx('rifle')">rifle</button><button data-e="sfx('mg')">MG</button><button data-e="burst('mg',8,80)">MG burst</button><button data-e="sfx('sniper')">sniper</button><button data-e="burst('aa',6,110)">AA burst</button><button data-e="sfx('mortar')">mortar launch</button><button data-e="sfx('rocket')">rocket</button><button data-e="sfx('flame')">flamethrower</button><button data-e="sfx('zap')">tesla zap (synth)</button>
 <button data-e="explode(64,160,1)">explosion small</button><button data-e="explode(64,160,2.2)">explosion large</button><button data-e="jetSfx(64)">enemy jet</button><button data-e="jetFlyby()">airstrike flyby</button><button data-e="SH.siren=-1e9;siren()">siren</button><button data-e="wrenchSfx(64,200)">repair wrench</button>
 <button data-e="enemyCue({type:'inf',x:30,y:60})">marching</button><button data-e="enemyCue({type:'jeep',x:30,y:60})">jeep</button><button data-e="enemyCue({type:'tank',x:30,y:60})">tank</button><button data-e="playS('heli',{loop:true,dur:4,vol:0.55,x:64,y:120,norand:1,verb:0.2})">helicopter (4 s)</button><button data-e="sfx('coin')">coin</button><button data-e="sfx('click')">UI click</button>
+<h2>In-game busy battle (stress demo)</h2>
+<p><small>Plays 20 s of a heavy wave through the real engine: 4 turret types firing, explosions, an airstrike, enemy vehicles, radio calls and the high-intensity battle music. Tick <b>slow-phone CPU</b> to burn ~25 ms of main-thread time every frame, like a budget Android phone; v26 audio should stay continuous.</small></p>
+<button id=stress style="background:#8a2a2a">▶ Busy battle (20 s)</button> <label><input type=checkbox id=slow> slow-phone CPU</label>
+<pre id=sst style="background:#10161c;padding:8px;border-radius:6px;min-height:3em;white-space:pre-wrap">–</pre>
 <h2>Soldier voice (radio + outdoor chain)</h2>
 <button data-e="vo('build')">build ack</button><button data-e="vo('wave')">wave</button><button data-e="vo('contact')">contact</button><button data-e="vo('aircraft')">enemy aircraft</button><button data-e="vo('boss')">boss</button><button data-e="vo('hq')">HQ hit</button><button data-e="vo('eng')">engineers</button><button data-e="vo('fixed')">fixed</button><button data-e="vo('down')">enemy down</button>
 <label style="display:block;margin:6px 0"><input type=checkbox id=radio checked> radio processing</label>
 <h2>Music (adaptive)</h2>
 <button data-m="menu">menu theme</button><button data-m="battle">battle</button><button data-m="battle2">battle – high intensity</button><button data-m="boss">boss</button><button data-m="">stop music</button>
-<p><small>Voice: Piper TTS, LibriTTS voice (CC BY 4.0). Music: original, synthesized in code. Tesla zap and sub-bass explosion tails: synthesized in code.</small></p></div>
+<p><small>Voice: Piper TTS, LibriTTS voice (CC BY 4.0). Music: original, synthesized in code and pre-rendered once into seamless loops (v26). Tesla zap and sub-bass explosion tails: synthesized in code.</small></p></div>
 <iframe id=g src="index.html?preview=1" allow="autoplay"></iframe>
 <script>
 const W=()=>document.getElementById('g').contentWindow;
@@ -28,4 +32,17 @@ document.getElementById('radio').onchange=e=>{ E("profile.voxRadio="+e.target.ch
 document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>run(b.dataset.e));
 document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ const k=b.dataset.s; run("{ const L=SFX_META['"+k+"'].loop; playS('"+k+"',{vol:0.9,norand:1,verb:0,loop:L,dur:L?3:0}); }"); });
 document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{ const m=b.dataset.m; run("profile.musicOn="+(!!m)+"; if(!profile.music) profile.music=0.6; audio.setMusic(); MUSIC.want=()=>'"+(m==="battle2"?"battle":m)+"'; window.__forceI="+(m==="battle2"?1:0.4)+";"); });
+
+let stressOn=false;
+document.getElementById('stress').onclick=()=>{ if(stressOn) return; stressOn=true; ctx(); const w=W(); const out=document.getElementById('sst');
+ E("profile.musicOn=true; if(!profile.music) profile.music=0.6; audio.setMusic(); MUSIC.want=()=>'battle'; window.__forceI=1;");
+ const ac=E("audio.ac"); const P=w.BaseAudioContext.prototype; let nodes=0; const orig={}; for(const k of Object.getOwnPropertyNames(P)) if(/^create/.test(k)&&typeof P[k]==='function'){ orig[k]=P[k]; P[k]=function(){ if(this===ac) nodes++; return orig[k].apply(this,arguments); }; }
+ let lt=0,ltMs=0; let po=null; try{ po=new w.PerformanceObserver(l=>{ for(const e of l.getEntries()){ lt++; ltMs+=e.duration; } }); po.observe({entryTypes:['longtask']}); }catch(e){}
+ const st0=JSON.parse(JSON.stringify(E("AENG.stats()"))); let i=0, r=7; const R=()=>{ r=(r*1103515245+12345)%2147483648; return r/2147483648; };
+ const guns=['rifle','rifle','mg','aa','sniper','mortar','rocket','flame']; let burn=0;
+ const burner=()=>{ if(!stressOn) return; if(document.getElementById('slow').checked){ const t=performance.now(); while(performance.now()-t<25){} } burn=requestAnimationFrame(burner); }; burner();
+ const id=setInterval(()=>{ i++; try{ w.eval("(function(R,i,guns){ const n=1+Math.floor(R()*3); for(let k=0;k<n;k++){ MIX.src={x:R()*128,y:60+R()*240,t:performance.now()}; sfx(guns[Math.floor(R()*guns.length)]); } if(R()<0.25) sfx('casing');"+
+   " if(i%12===0) explode(R()*128,80+R()*200,1+R()*1.5); if(i%60===20){ jetFlyby(); } if(i%35===5) enemyCue({type:['tank','jeep','inf','apc'][i%4],x:R()*128,y:40+R()*100}); if(i%50===30){ VOX.busy=0; playVoice(['contact','go','hq','air','down'][i%5]); } })")(R,i,guns); }catch(e){}
+  if(i%5===0){ const s=E("AENG.stats()"); out.textContent=`t=${(i/10).toFixed(1)} s  voices=${s.voices}/20  played=${s.played-st0.played}  dropped=${s.drop-st0.drop}  soft-stolen=${s.steal-st0.steal}\nnew audio nodes/s=${(nodes/(i/10)).toFixed(0)}  long tasks=${lt} (${ltMs.toFixed(0)} ms)  music track=${s.track} (loop starts ${s.musStarts})  ctx=${ac.state} ${ac.sampleRate} Hz, base latency ${(ac.baseLatency*1000||0).toFixed(0)} ms`; }
+  if(i>=200){ clearInterval(id); stressOn=false; cancelAnimationFrame(burn); for(const k in orig) P[k]=orig[k]; if(po) po.disconnect(); out.textContent+="\ndone."; } },100); };
 </script></body></html>
