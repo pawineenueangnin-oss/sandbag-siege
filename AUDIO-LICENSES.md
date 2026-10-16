@@ -1,4 +1,4 @@
-# Sandbag Siege – audio licenses (v26)
+# Bunkerfront – audio licenses (v26)
 
 Embedded audio (base64 Ogg/Opus inside index.html): 22 recorded sound effects (CC0, ~130 KB raw / ~174 KB base64) and the soldier voice clips (CC BY 4.0, below).
 Music, the tesla zap, sub-bass explosion tails, engine rumble, ambience, reverb impulse responses and all UI tones not listed below are synthesized at runtime with the Web Audio API (original, no third-party material).
